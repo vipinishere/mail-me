@@ -13,7 +13,7 @@ const port = process.env.PORT || 3000;
 const globalLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 100, // 100 requests per 15 mins
-  message: "Too many requests from this IP, try again later."
+  message: "Too many requests from this IP, try again later.",
 });
 
 app.set("view engine", "ejs");
@@ -40,10 +40,16 @@ app.post("/", async (req, res) => {
   try {
     const transporter = nodemailer.createTransport({
       service: "gmail",
+      host: "smtp.gmail.com",
+      port: 465,
+      secure: true,
       auth: {
         user: process.env.EMAIL_ID,
         pass: process.env.EMAIL_PASS,
       },
+      tls: {
+        rejectUnauthorized: false,
+      }
     });
 
     let getMailOptions = {
@@ -57,8 +63,7 @@ app.post("/", async (req, res) => {
             `,
     };
 
-    await transporter.sendMail(getMailOptions);
-
+    
     let sentMailOptions = {
       from: '"Support Team" <yourcompany@gmail.com>',
       to: email,
@@ -69,21 +74,22 @@ app.post("/", async (req, res) => {
       <p>We have received your query regarding <strong>${query}</strong>. Our team will contact you soon.</p>
       <p><strong>Email:</strong> ${email}<br>
       <p>Best regards,<br>Support Team<br>Vipin Kumar Vishwakarma</p>
-    `,
+      `,
     };
-
+    
     await transporter.sendMail(sentMailOptions);
+    await transporter.sendMail(getMailOptions);
     res.render("index", { message: "✅ Mail sent successfully!" });
   } catch (err) {
+    console.log(err);
     res.render("index", { message: "❌ Failed to send mail. Try again!" });
   }
 });
 
-
 // handle any not defined route
-app.all("/*any", (req, res)=> {
-    res.render("404");
-})
+app.all("/*any", (req, res) => {
+  res.render("404");
+});
 
 app.listen(port, (err) => {
   if (err) {
@@ -91,7 +97,6 @@ app.listen(port, (err) => {
   }
   console.log(`server is running on port number: ${port}`);
 });
-
 
 // .env file
 // EMAIL_ID = YOUR-EMAIL@gmail.com
