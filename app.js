@@ -87,7 +87,7 @@ app.listen(process.env.PORT, (err) => {
   if (err) {
     console.log("err while start the server", err);
   }
-  console.log("server is running on port number: 3000");
+  console.log(`server is running on port number: ${process.env.PORT}`);
 });
 
 

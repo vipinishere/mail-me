@@ -1,7 +1,7 @@
 {
   "name": "mail-me",
   "version": "1.0.0",
-  "description": "",
+  "description": "A simple and modern contact form project built with Express.js, EJS, and TailwindCSS, which allows users to send queries directly via email.",
   "main": "app.js",
   "scripts": {
     "start": "node app.js",

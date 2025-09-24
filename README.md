@@ -11,7 +11,7 @@ It includes **rate limiting**, and **popup messages** for better UX.
 - 🔒 Rate limiting to prevent abuse (spam protection)
 - 🎨 Modern UI with **TailwindCSS**
 - ⚡ Popup message with dismiss (cross ❌ button + auto-hide)
-- 🌐 Deployed on Render **[Open Website](http://localhost:3000)**
+- 🌐 Deployed on Render **[Open Website](https://mail-me-kpdc.onrender.com/)**
 
 ---
 
