@@ -83,7 +83,7 @@ app.all("/*any", (req, res)=> {
     res.render("404");
 })
 
-app.listen(3000, (err) => {
+app.listen(process.env.PORT, (err) => {
   if (err) {
     console.log("err while start the server", err);
   }
