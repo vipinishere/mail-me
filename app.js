@@ -8,6 +8,8 @@ const rateLimit = require("express-rate-limit");
 dotenv.config();
 const app = express();
 
+const port = process.env.PORT || 3000;
+
 const globalLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 100, // 100 requests per 15 mins
@@ -73,7 +75,7 @@ app.post("/", async (req, res) => {
     await transporter.sendMail(sentMailOptions);
     res.render("index", { message: "✅ Mail sent successfully!" });
   } catch (err) {
-    res.render("about", { message: "❌ Failed to send mail. Try again!" });
+    res.render("index", { message: "❌ Failed to send mail. Try again!" });
   }
 });
 
@@ -83,11 +85,11 @@ app.all("/*any", (req, res)=> {
     res.render("404");
 })
 
-app.listen(process.env.PORT, (err) => {
+app.listen(port, (err) => {
   if (err) {
     console.log("err while start the server", err);
   }
-  console.log(`server is running on port number: ${process.env.PORT}`);
+  console.log(`server is running on port number: ${port}`);
 });
 
 
