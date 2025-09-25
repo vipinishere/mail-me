@@ -34,9 +34,6 @@ app.post("/", async (req, res) => {
     return res.render("index", { message: "All fields are required!" });
   }
 
-  // console.log(process.env.EMAIL_ID)
-  // console.log(process.env.EMAIL_PASS)
-
   try {
     const transporter = nodemailer.createTransport({
       service: "gmail",
@@ -46,13 +43,11 @@ app.post("/", async (req, res) => {
       auth: {
         user: process.env.EMAIL_ID,
         pass: process.env.EMAIL_PASS,
-      },
-      tls: {
-        rejectUnauthorized: false,
       }
     });
 
     let getMailOptions = {
+      from: "from your website",
       to: process.env.EMAIL_ID,
       subject: query,
       text: `
@@ -76,9 +71,29 @@ app.post("/", async (req, res) => {
       <p>Best regards,<br>Support Team<br>Vipin Kumar Vishwakarma</p>
       `,
     };
+
+    await new Promise((resolve, reject)=> {
+      transporter.sendMail(sentMailOptions, (err, info)=> {
+        if(err) {
+          console.error(err);
+          reject(err);
+        } else {
+          resolve(info);
+        }
+      });
+    });
+
+    await new Promise((resolve, reject)=> {
+      transporter.sendMail(getMailOptions, (err, info)=> {
+        if(err){
+          console.error(err);
+          reject(err);
+        } else {
+          resolve(info);
+        }
+      });
+    });
     
-    await transporter.sendMail(sentMailOptions);
-    await transporter.sendMail(getMailOptions);
     res.render("index", { message: "✅ Mail sent successfully!" });
   } catch (err) {
     console.log(err);
